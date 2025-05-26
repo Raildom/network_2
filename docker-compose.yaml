@@ -1,0 +1,56 @@
+networks:
+  subnet_1:
+  subnet_2:
+  subnet_3:
+  subnet_4:
+
+services:
+  router1:
+    image: router_image
+    networks:
+      subnet_1:
+        
+
+  router2:
+    image: router_image
+    networks:
+      subnet_1:
+      subnet_2:
+      subnet_3:
+
+  router3:
+    image: router_image
+    networks:
+      subnet_1:
+      subnet_3:
+      subnet_4:
+
+  host1:
+    image: host_image
+    networks:
+      subnet_2:
+
+  host2:
+    image: host_image
+    networks:
+      subnet_3:
+
+  host3:
+    image: host_image
+    networks:
+      subnet_4:
+
+  web1:
+    image: web_image
+    networks:
+      subnet_2:
+
+  web2:
+    image: web_image
+    networks:
+      subnet_3:
+
+  web3:
+    image: web_image
+    networks:
+      subnet_4:
