@@ -39,7 +39,7 @@ services:
         echo 'Habilitando encaminhamento IP em router1...' &&
         sysctl -w net.ipv4.ip_forward=1 &&
         echo 'Adicionando rotas estáticas em router1...' &&
-        ip route add 192.168.2.0/24 via 192.168.1.2 &&
+        ip route add 192.168.2.0/24 via 192.168.1.3 && # <<< CORRIGIDO
         ip route add 192.168.3.0/24 via 192.168.1.3 &&
         ip route add 192.168.4.0/24 via 192.168.1.4 &&
         echo 'Configuração de router1 concluída. Mantendo container ativo.' &&
@@ -105,7 +105,7 @@ services:
     command: >
       bash -c "
         echo 'Configurando gateway padrão em host1...' &&
-        ip route add default via 192.168.2.2 &&
+        ip route replace default via 192.168.2.2 && # <<< CORRIGIDO
         echo 'Configurando /etc/hosts em host1...' &&
         echo '192.168.2.100 SITE_A' >> /etc/hosts &&
         echo '192.168.3.100 SITE_B' >> /etc/hosts &&
@@ -128,7 +128,7 @@ services:
     command: >
       bash -c "
         echo 'Configurando gateway padrão em host2...' &&
-        ip route add default via 192.168.3.2 &&
+        ip route replace default via 192.168.3.2 && # <<< CORRIGIDO
         echo 'Configurando /etc/hosts em host2...' &&
         echo '192.168.2.100 SITE_A' >> /etc/hosts &&
         echo '192.168.3.100 SITE_B' >> /etc/hosts &&
@@ -151,7 +151,7 @@ services:
     command: >
       bash -c "
         echo 'Configurando gateway padrão em host3...' &&
-        ip route add default via 192.168.4.2 &&
+        ip route replace default via 192.168.4.2 && # <<< CORRIGIDO
         echo 'Configurando /etc/hosts em host3...' &&
         echo '192.168.2.100 SITE_A' >> /etc/hosts &&
         echo '192.168.3.100 SITE_B' >> /etc/hosts &&
@@ -177,7 +177,7 @@ services:
     command: >
       bash -c "
         echo 'Configurando gateway padrão em web1...' &&
-        ip route add default via 192.168.2.2 &&
+        ip route replace default via 192.168.2.2 && # <<< CORRIGIDO
         echo 'Iniciando servidor Nginx...' &&
         nginx -g 'daemon off;'
       "
@@ -198,7 +198,7 @@ services:
     command: >
       bash -c "
         echo 'Configurando gateway padrão em web2...' &&
-        ip route add default via 192.168.3.2 &&
+        ip route replace default via 192.168.3.2 && # <<< CORRIGIDO
         echo 'Iniciando servidor Nginx...' &&
         nginx -g 'daemon off;'
       "
@@ -219,7 +219,7 @@ services:
     command: >
       bash -c "
         echo 'Configurando gateway padrão em web3...' &&
-        ip route add default via 192.168.4.2 &&
+        ip route replace default via 192.168.4.2 && # <<< CORRIGIDO
         echo 'Iniciando servidor Nginx...' &&
         nginx -g 'daemon off;'
       "
