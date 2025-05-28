@@ -166,7 +166,7 @@ services:
     cap_add:
       - NET_ADMIN
     container_name: web1
-    hostname: SITE_A
+    hostname: www1.empresa.com
     depends_on:
       - router2
     networks:
@@ -187,7 +187,7 @@ services:
     cap_add:
       - NET_ADMIN
     container_name: web2
-    hostname: SITE_B
+    hostname: www2.empresa.com
     depends_on:
       - router2
     networks:
@@ -208,7 +208,7 @@ services:
     cap_add:
       - NET_ADMIN
     container_name: web3
-    hostname: SITE_C
+    hostname: www3.empresa.com
     depends_on:
       - router3
     networks:
