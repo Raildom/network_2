@@ -5,7 +5,7 @@
 # Definindo as redes customizadas com configuração de IPAM
 
 # comando para dar permissões
-# sudo chown -R hermeson:hermeson ./router/frr_configs
+# sudo chown -R raildom:raildom ./router/frr_configs
 # sudo chmod -R u+rw ./router/frr_configs
 networks:
   lan1:
