@@ -1,7 +1,12 @@
+# comandos para ver as rotas configuradas nos roteadores
 # docker exec router1 vtysh -c 'show ip route'
 # docker exec router2 vtysh -c 'show ip route'
 # docker exec router3 vtysh -c 'show ip route'
 # Definindo as redes customizadas com configuração de IPAM
+
+# comando para dar permissões
+# sudo chown -R hermeson:hermeson ./router/frr_configs
+# sudo chmod -R u+rw ./router/frr_configs
 networks:
   lan1:
     driver: bridge
