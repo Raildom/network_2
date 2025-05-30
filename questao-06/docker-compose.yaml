@@ -1,7 +1,11 @@
+# comandos para ver as rotas configuradas nos roteadores
 # docker exec router1 vtysh -c 'show ip route'
 # docker exec router2 vtysh -c 'show ip route'
 # docker exec router3 vtysh -c 'show ip route'
-# comando para verificar as rotas RIP configuradas nos roteadores
+
+# comando para dar permissões
+# sudo chown -R raildom:raildom ./router/frr_configs
+# sudo chmod -R u+rw ./router/frr_configs
 
 # Definindo as redes customizadas com configuração de IPAM
 networks:
@@ -28,7 +32,7 @@ networks:
 
 # Definindo os serviços (containers)
 services:
-  # Roteadores com FRR (RIP)
+  # Roteadores com FRR (OSPF)
   router1:
     build:
       context: ./router
@@ -43,25 +47,24 @@ services:
         ipv4_address: 192.168.1.2
     command: >
       bash -c "
-        echo 'Aguardando redes...' && \
-        sleep 5 && \
         echo 'Habilitando encaminhamento IP em router1...' && \
         sysctl -w net.ipv4.ip_forward=1 && \
         echo 'Criando diretórios FRR e ajustando permissões em router1...' && \
         mkdir -p /var/log/frr /var/run/frr && \
-        chown frr:frr /var/log/frr /var/run/frr && \
-        touch /etc/frr/zebra.conf /etc/frr/ripd.conf && \
+        chown frr:frr /var/log/frr && \
+        chown frr:frrvty /var/run/frr && \
+        touch /etc/frr/zebra.conf /etc/frr/ospfd.conf /etc/frr/vtysh.conf && \
         chown frr:frr /etc/frr/*.conf && \
         chmod 640 /etc/frr/*.conf && \
         echo 'Configurando /etc/hosts em router1...' && \
         echo '192.168.2.100 www1.empresa.com' >> /etc/hosts && \
         echo '192.168.3.100 www2.empresa.com' >> /etc/hosts && \
         echo '192.168.4.100 www3.empresa.com' >> /etc/hosts && \
-        echo 'Iniciando daemons FRR (zebra e ripd) em router1...' && \
-        /usr/lib/frr/zebra -d -f /etc/frr/zebra.conf & \
-        /usr/lib/frr/ripd -d -f /etc/frr/ripd.conf & \
+        echo 'Iniciando daemons FRR (zebra e ospfd) em router1...' && \
+        /usr/lib/frr/zebra -d -f /etc/frr/zebra.conf && \
+        /usr/lib/frr/ospfd -d -f /etc/frr/ospfd.conf && \
         echo 'Configuração de router1 concluída. Mantendo container ativo.' && \
-        wait && tail -f /dev/null
+        tail -f /dev/null
       "
 
   router2:
@@ -82,25 +85,24 @@ services:
         ipv4_address: 192.168.3.2
     command: >
       bash -c "
-        echo 'Aguardando redes...' && \
-        sleep 5 && \
-        echo 'Habilitando encaminhamento IP em router1...' && \
+        echo 'Habilitando encaminhamento IP em router2...' && \
         sysctl -w net.ipv4.ip_forward=1 && \
-        echo 'Criando diretórios FRR e ajustando permissões em router1...' && \
+        echo 'Criando diretórios FRR e ajustando permissões em router2...' && \
         mkdir -p /var/log/frr /var/run/frr && \
-        chown frr:frr /var/log/frr /var/run/frr && \
-        touch /etc/frr/zebra.conf /etc/frr/ripd.conf && \
+        chown frr:frr /var/log/frr && \
+        chown frr:frrvty /var/run/frr && \
+        touch /etc/frr/zebra.conf /etc/frr/ospfd.conf /etc/frr/vtysh.conf && \
         chown frr:frr /etc/frr/*.conf && \
         chmod 640 /etc/frr/*.conf && \
-        echo 'Configurando /etc/hosts em router1...' && \
+        echo 'Configurando /etc/hosts em router2...' && \
         echo '192.168.2.100 www1.empresa.com' >> /etc/hosts && \
         echo '192.168.3.100 www2.empresa.com' >> /etc/hosts && \
         echo '192.168.4.100 www3.empresa.com' >> /etc/hosts && \
-        echo 'Iniciando daemons FRR (zebra e ripd) em router1...' && \
-        /usr/lib/frr/zebra -d -f /etc/frr/zebra.conf & \
-        /usr/lib/frr/ripd -d -f /etc/frr/ripd.conf & \
-        echo 'Configuração de router1 concluída. Mantendo container ativo.' && \
-        wait && tail -f /dev/null
+        echo 'Iniciando daemons FRR (zebra e ospfd) em router2...' && \
+        /usr/lib/frr/zebra -d -f /etc/frr/zebra.conf && \
+        /usr/lib/frr/ospfd -d -f /etc/frr/ospfd.conf && \
+        echo 'Configuração de router2 concluída. Mantendo container ativo.' && \
+        tail -f /dev/null
       "
 
   router3:
@@ -121,25 +123,24 @@ services:
         ipv4_address: 192.168.4.2
     command: >
       bash -c "
-        echo 'Aguardando redes...' && \
-        sleep 5 && \
-        echo 'Habilitando encaminhamento IP em router1...' && \
+        echo 'Habilitando encaminhamento IP em router3...' && \
         sysctl -w net.ipv4.ip_forward=1 && \
-        echo 'Criando diretórios FRR e ajustando permissões em router1...' && \
+        echo 'Criando diretórios FRR e ajustando permissões em router3...' && \
         mkdir -p /var/log/frr /var/run/frr && \
-        chown frr:frr /var/log/frr /var/run/frr && \
-        touch /etc/frr/zebra.conf /etc/frr/ripd.conf && \
+        chown frr:frr /var/log/frr && \
+        chown frr:frrvty /var/run/frr && \
+        touch /etc/frr/zebra.conf /etc/frr/ospfd.conf /etc/frr/vtysh.conf && \
         chown frr:frr /etc/frr/*.conf && \
         chmod 640 /etc/frr/*.conf && \
-        echo 'Configurando /etc/hosts em router1...' && \
+        echo 'Configurando /etc/hosts em router3...' && \
         echo '192.168.2.100 www1.empresa.com' >> /etc/hosts && \
         echo '192.168.3.100 www2.empresa.com' >> /etc/hosts && \
         echo '192.168.4.100 www3.empresa.com' >> /etc/hosts && \
-        echo 'Iniciando daemons FRR (zebra e ripd) em router1...' && \
-        /usr/lib/frr/zebra -d -f /etc/frr/zebra.conf & \
-        /usr/lib/frr/ripd -d -f /etc/frr/ripd.conf & \
-        echo 'Configuração de router1 concluída. Mantendo container ativo.' && \
-        wait && tail -f /dev/null
+        echo 'Iniciando daemons FRR (zebra e ospfd) em router3...' && \
+        /usr/lib/frr/zebra -d -f /etc/frr/zebra.conf && \
+        /usr/lib/frr/ospfd -d -f /etc/frr/ospfd.conf && \
+        echo 'Configuração de router3 concluída. Mantendo container ativo.' && \
+        tail -f /dev/null
       "
 
   # Hosts (mantidos como na Questão 04, gateway já configurado)
