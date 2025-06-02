@@ -2,11 +2,12 @@
 # docker exec router1 vtysh -c 'show ip route'
 # docker exec router2 vtysh -c 'show ip route'
 # docker exec router3 vtysh -c 'show ip route'
-# Definindo as redes customizadas com configuração de IPAM
 
 # comando para dar permissões
 # sudo chown -R raildom:raildom ./router/frr_configs
 # sudo chmod -R u+rw ./router/frr_configs
+
+# Definindo as redes customizadas com configuração de IPAM
 networks:
   lan1:
     driver: bridge
@@ -142,7 +143,7 @@ services:
         tail -f /dev/null
       "
 
-  # Hosts (mantidos como na Questão 04, gateway já configurado)
+  # Hosts
   host1:
     build:
       context: ./host
@@ -218,7 +219,7 @@ services:
         tail -f /dev/null
       "
 
-  # Servidores Web (mantidos como na Questão 04, gateway já configurado)
+  # Servidores Web
   web1:
     build:
       context: ./web1

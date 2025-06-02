@@ -143,7 +143,7 @@ services:
         tail -f /dev/null
       "
 
-  # Hosts (mantidos como na Questão 04, gateway já configurado)
+  # Hosts
   host1:
     build:
       context: ./host
@@ -219,7 +219,7 @@ services:
         tail -f /dev/null
       "
 
-  # Servidores Web (mantidos como na Questão 04, gateway já configurado)
+  # Servidores Web
   web1:
     build:
       context: ./web1
